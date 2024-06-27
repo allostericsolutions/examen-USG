@@ -1,7 +1,12 @@
 import streamlit as st
 import streamlit as st
 import random
+ # Mostrar la imagen de la empresa con tamaño ajustado
+    st.image("https://i.imgur.com/LzPcPIk.png", caption='Allosteric Solutions', width=200)
 
+    # Compartir la página empresarial y el correo
+    st.markdown("[Visita nuestra página web](https://www.allostericsolutions.com)")
+    st.markdown("Contacto: [franciscocuriel@allostericsolutions.com](mailto:franciscocuriel@allostericsolutions.com)")
 # List of organs
 peritoneal_organs = [
     "Stomach", "Liver", "Spleen", "First part of the Duodenum", "Jejunum",
