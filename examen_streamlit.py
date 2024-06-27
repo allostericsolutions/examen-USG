@@ -3,7 +3,7 @@ import random
 
 def mostrar_contacto_empresa():
     # Mostrar la imagen de la empresa con tamaño ajustado
-    st.image("https://i.imgur.com/LzPcPIk.png", caption='Allosteric Solutions', width=300)
+    st.image("https://i.imgur.com/LzPcPIk.png", caption='Allosteric Solutions', width=200)
 
     # Compartir la página empresarial y el correo
     col1, col2 = st.columns(2)
@@ -51,10 +51,10 @@ def check_answer(organ, response):
 
 # Main function to render the quiz
 def render_quiz():
-    st.title("Organ Classification Quiz")
-
-    # Llamar a la función de información de contacto
+    # Mostrar información de contacto arriba
     mostrar_contacto_empresa()
+
+    st.title("Organ Classification Quiz")
 
     if len(st.session_state['all_organs']) == 0:
         st.write("No more organs to classify.")
@@ -76,6 +76,8 @@ def render_quiz():
     if st.button("Show Grade"):
         show_grade()
 
+    # Mostrar información de contacto abajo
+    mostrar_contacto_empresa()
 
 def show_grade():
     total_questions = len(peritoneal_organs + retroperitoneal_organs)
