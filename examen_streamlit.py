@@ -3,7 +3,7 @@ import random
 
 def mostrar_contacto_empresa():
     # Mostrar la imagen de la empresa con tamaño ajustado
-    st.image("https://i.imgur.com/LzPcPIk.png", caption='Allosteric Solutions', width=200)
+    st.image("https://i.imgur.com/LzPcPIk.png", caption='Allosteric Solutions', width=300)
 
     # Compartir la página empresarial y el correo
     col1, col2 = st.columns(2)
