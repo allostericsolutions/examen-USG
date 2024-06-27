@@ -1,9 +1,11 @@
 import streamlit as st
 import random
+from io import BytesIO
+from reportlab.pdfgen import canvas
 
 def mostrar_contacto_empresa():
     # Mostrar la imagen de la empresa con tamaño ajustado
-    st.image("https://i.imgur.com/LzPcPIk.png", caption='Allosteric Solutions', width=350)
+    st.image("https://i.imgur.com/LzPcPIk.png", caption='Allosteric Solutions', width=200)
 
     # Compartir la página empresarial y el correo
     col1, col2 = st.columns(2)
@@ -37,19 +39,18 @@ if 'incorrect_answers' not in st.session_state:
 if 'all_organs' not in st.session_state:
     st.session_state['all_organs'] = all_organs.copy()  # Use a copy to avoid shuffling the global list
 
-
 def check_answer(organ, response):
     if (organ in peritoneal_organs and response == "Peritoneal") or \
             (organ in retroperitoneal_organs and response == "Retroperitoneal"):
         st.session_state['score'] += 1
+        st.success(f"¡Correcto! {organ} es {response}")  # Mostrar mensaje de éxito
     else:
         st.session_state['incorrect_answers'].append(organ)
+        st.error(f"Incorrecto. {organ} es {  'Peritoneal' if organ in peritoneal_organs else 'Retroperitoneal'}") # Mostrar mensaje de error
 
     st.session_state['answered_questions'].append(organ)
     st.session_state['all_organs'].remove(organ)
 
-
-# Main function to render the quiz
 def render_quiz():
     # Mostrar información de contacto arriba
     mostrar_contacto_empresa()
@@ -58,6 +59,8 @@ def render_quiz():
 
     if len(st.session_state['all_organs']) == 0:
         st.write("No more organs to classify.")
+        if st.button("Show Grade"):
+            show_grade()
     else:
         organ = st.session_state['all_organs'][0]
 
@@ -72,9 +75,6 @@ def render_quiz():
             if st.button("Retroperitoneal", key=f"{organ}_retroperitoneal"):
                 check_answer(organ, "Retroperitoneal")
                 st.experimental_rerun()
-
-    if st.button("Show Grade"):
-        show_grade()
 
     # Mostrar información de contacto abajo
     mostrar_contacto_empresa()
@@ -97,13 +97,34 @@ def show_grade():
     else:
         st.write("Excellent!")
 
-    # Reset for another round
-    st.session_state['score'] = 0
-    st.session_state['answered_questions'] = []
-    st.session_state['incorrect_answers'] = []
-    st.session_state['all_organs'] = all_organs.copy()
-    random.shuffle(st.session_state['all_organs'])
+    # Botón "Intenta de nuevo"
+    if st.button("Try Again"):
+        st.session_state['score'] = 0
+        st.session_state['answered_questions'] = []
+        st.session_state['incorrect_answers'] = []
+        st.session_state['all_organs'] = all_organs.copy()
+        random.shuffle(st.session_state['all_organs'])
+        st.experimental_rerun()
 
+    # Botón para descargar respuestas en PDF
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer)
+    c.drawString(100, 750, "Organ Classification Answers:")
+    y = 700
+    for organ in peritoneal_organs:
+        c.drawString(100, y, f"{organ} - Peritoneal")
+        y -= 20
+    for organ in retroperitoneal_organs:
+        c.drawString(100, y, f"{organ} - Retroperitoneal")
+        y -= 20
+    c.save()
+    buffer.seek(0)
+    st.download_button(
+        "Download Answers as PDF",
+        data=buffer,
+        file_name="organ_classification_answers.pdf",
+        mime="application/pdf"
+    )
 
 if __name__ == "__main__":
     render_quiz()
