@@ -6,8 +6,11 @@ def mostrar_contacto_empresa():
     st.image("https://i.imgur.com/LzPcPIk.png", caption='Allosteric Solutions', width=200)
 
     # Compartir la página empresarial y el correo
-    st.markdown("[Visita nuestra página web](https://www.allostericsolutions.com)")
-    st.markdown("Contacto: [franciscocuriel@allostericsolutions.com](mailto:franciscocuriel@allostericsolutions.com)")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("[Visita nuestra página web](https://www.allostericsolutions.com)")
+    with col2:
+        st.markdown("Contacto: [franciscocuriel@allostericsolutions.com](mailto:franciscocuriel@allostericsolutions.com)")
 
 # List of organs
 peritoneal_organs = [
